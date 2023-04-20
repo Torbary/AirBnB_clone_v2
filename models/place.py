@@ -10,7 +10,7 @@ import os
 hbnb_storage_type = os.getenv('HBNB_TYPE_STORAGE')
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """ A place to stay """
     if hbnb_storage_type == 'db':
         __tablename__ = 'places'
