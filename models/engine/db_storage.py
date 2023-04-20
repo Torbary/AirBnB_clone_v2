@@ -6,6 +6,7 @@ import models
 from models.base_model import Base, BaseModel
 from models.state import State
 from models.city import City
+from models.user import User
 import os
 
 
@@ -20,7 +21,7 @@ class DBStorage:
     hbnb_env = os.getenv('HBNB_ENV')
 
     classes = {
-        'State': State, 'City': City,
+        'State': State, 'City': City, 'User': User,
     }
 
     def __init__(self):
