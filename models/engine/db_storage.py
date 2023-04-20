@@ -7,6 +7,7 @@ from models.base_model import Base, BaseModel
 from models.state import State
 from models.city import City
 from models.user import User
+from models.place import Place
 import os
 
 
@@ -22,6 +23,7 @@ class DBStorage:
 
     classes = {
         'State': State, 'City': City, 'User': User,
+        'Place': Place,
     }
 
     def __init__(self):
