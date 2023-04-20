@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
+from models.review import Review
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy.orm import relationship
 import models
 import os
 
@@ -22,6 +24,8 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
+        reviews = relationship('Review', backref='place',
+                               cascade='all, delete-orphan')
     else:
         city_id = ""
         user_id = ""
@@ -34,6 +38,16 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+        @property
+        def reviews(self):
+            '''returns a list reviews instance with the same place'''
+            all_reviews = models.storage.all(Review)
+            result = []
+            for review in all_reviews.values():
+                if review.place_id == self.id:
+                    result.append(review)
+            return result
 
     def __init__(self, *args, **kwargs):
         """initialization method for Place object"""
