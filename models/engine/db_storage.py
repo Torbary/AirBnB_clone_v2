@@ -8,10 +8,7 @@ from models.state import State
 from models.city import City
 from models.user import User
 from models.place import Place
-<<<<<<< HEAD
 from models.review import Review
-=======
->>>>>>> refs/remotes/origin/master
 import os
 
 
