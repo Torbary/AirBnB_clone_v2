@@ -3,7 +3,7 @@
 import cmd
 import sys
 from models.base_model import BaseModel
-from models.__init__ import storage
+from models import storage
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -155,7 +155,7 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        args = args.split(' ')
+        args = args.split()
         class_type = args[0]
         if class_type not in HBNBCommand.classes:
             print("** class doesn't exist **")
@@ -243,16 +243,16 @@ class HBNBCommand(cmd.Cmd):
         """ Shows all objects, or all objects of a class"""
         print_list = []
 
-        objects = storage.all()
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
+            objects = storage.all(HBNBCommand.classes[args])
             for k, v in objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+                print_list.append(str(v))
         else:
+            objects = storage.all()
             for k, v in objects.items():
                 print_list.append(str(v))
 

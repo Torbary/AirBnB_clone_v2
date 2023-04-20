@@ -14,7 +14,7 @@ class State(BaseModel, Base):
     if hbnb_storage_type is not None and hbnb_storage_type == 'db':
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
-        cities = relationship('City', backref='state.id',
+        cities = relationship('City', backref='state',
                               cascade='all, delete-orphan')
     else:
         name = ""
