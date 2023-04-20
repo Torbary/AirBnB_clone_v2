@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 from models.base_model import BaseModel, Base
+from models.city import City
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 import models
@@ -24,9 +25,9 @@ class State(BaseModel, Base):
             '''
             list of City instances with state_id == current State.id
             '''
-            all_cities = models.storage.all()
+            all_cities = models.storage.all(City)
             result = []
-            for key, city in all_cities.items():
+            for city in all_cities.values():
                 if city.state_id == self.id:
                     result.append(city)
             return result
