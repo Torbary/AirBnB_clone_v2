@@ -2,12 +2,28 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
 from models.review import Review
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from models.amenity import Amenity
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 import models
 import os
 
 hbnb_storage_type = os.getenv('HBNB_TYPE_STORAGE')
+
+if hbnb_storage_type == 'db':
+    place_amenity = Table(
+        'place_amenity', Base.metadata,
+        Column(
+            'place_id', String(60),
+            ForeignKey('places.id'),
+            primary_key=True, nullable=False
+        ),
+        Column(
+            'amenity_id', String(60),
+            ForeignKey('amenities.id'),
+            primary_key=True, nullable=False
+        )
+    )
 
 
 class Place(BaseModel, Base):
@@ -26,6 +42,9 @@ class Place(BaseModel, Base):
         longitude = Column(Float, nullable=True)
         reviews = relationship('Review', backref='place',
                                cascade='all, delete-orphan')
+        amenities = relationship('Amenity', secondary='place_amenity',
+                                 backref='place_amenities',
+                                 viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -51,6 +70,23 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     result.append(review)
             return result
+
+        @property
+        def amenities(self):
+            '''returns a list of amenity instance'''
+            all_amenities = models.storage.all(Amenity)
+            result = [
+                amenity for amenity in all_amenities.values()
+                if amenity.id in self.amenity_ids
+            ]
+            return result
+
+        @amenities.setter
+        def amenities(self, amenity):
+            '''appends an amenity id to the amenity ids list.'''
+            if isinstance(amenity, Amenity):
+                if amenity.id not in self.amenity_ids:
+                    self.amenity_ids.append(amenity.id)
 
     def __init__(self, *args, **kwargs):
         """initialization method for Place object"""
