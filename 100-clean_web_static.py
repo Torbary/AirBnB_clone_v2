@@ -4,6 +4,7 @@ import os
 from fabric.api import *
 
 env.hosts = ["34.207.211.110", "54.152.234.206"]
+env.user = "ubuntu"
 
 
 def do_clean(number=0):
